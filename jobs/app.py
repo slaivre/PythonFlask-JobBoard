@@ -1,5 +1,6 @@
 from http.client import ImproperConnectionState
 from multiprocessing import connection
+from select import select
 import sqlite3
 from unittest import result
 from flask import Flask, render_template, g 
@@ -35,4 +36,5 @@ def close_connection(exeption):
 @app.route('/')
 @app.route('/jobs')
 def  jobs():
-    return render_template('index.html')
+    jobs =execute_sql('SELECT job.id, job.title, job.description, job.salary, employer.id as employer_id, employer.name as employer_name FROM job JOIN employer ON employer.id = job.employer_id' )
+    return render_template('index.html', jobs=jobs)
